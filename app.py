@@ -29,7 +29,7 @@ import parsing
 
 server = Flask(__name__)
 app = dash.Dash(__name__, server=server, external_stylesheets=[dbc.themes.BOOTSTRAP])
-app.title = 'GNPS - Template'
+app.title = 'Nature Author Entry Dashboard'
 
 server = app.server
 
@@ -41,7 +41,7 @@ NAVBAR = dbc.Navbar(
         ),
         dbc.Nav(
             [
-                dbc.NavItem(dbc.NavLink("GNPS - Template Dashboard - Version 0.1", href="#")),
+                dbc.NavItem(dbc.NavLink("Nature Author Entry Dashboard - Version 0.1", href="#")),
             ],
         navbar=True)
     ],
@@ -85,11 +85,6 @@ CONTRIBUTORS_DASHBOARD = [
     dbc.CardBody(
         [
             "Mingxun Wang PhD - UC San Diego",
-            html.Br(),
-            html.Br(),
-            html.H5("Citation"),
-            html.A('Mingxun Wang, Jeremy J. Carver, Vanessa V. Phelan, Laura M. Sanchez, Neha Garg, Yao Peng, Don Duy Nguyen et al. "Sharing and community curation of mass spectrometry data with Global Natural Products Social Molecular Networking." Nature biotechnology 34, no. 8 (2016): 828. PMID: 27504778', 
-                    href="https://www.nature.com/articles/nbt.3597")
         ]
     )
 ]
