@@ -153,7 +153,7 @@ def draw_output(fielddata):
         ## Commands
     ''')  
 
-    return [instructions, html.Pre(all_commands_string)]
+    return [[instructions, html.Pre(all_commands_string)]]
 
 # API
 @server.route("/api")
