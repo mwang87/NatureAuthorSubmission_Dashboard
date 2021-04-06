@@ -17,9 +17,7 @@ import requests
 import uuid
 import werkzeug
 
-import pymzml
 import numpy as np
-from tqdm import tqdm
 import urllib
 import json
 
