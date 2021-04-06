@@ -1,10 +1,3 @@
-## GNPS Dash Basic Template
+## Nature Author Formatting Dashboard
 
-This is a minimally viable template for GNPS without a worker
-
-### Editing Tempalte
-
-1. Replace all references to template to your own name
-1. Change the external port in docker-compose.yml
-1. Make new repo
-1. Bring up the server with ```make server-compose-interactive```
+This makes a dash dashboard to convert authors into javascript to auto enter them on the Nature submission website
