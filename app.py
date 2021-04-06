@@ -66,13 +66,6 @@ DATASELECTION_CARD = [
     )
 ]
 
-LEFT_DASHBOARD = [
-    html.Div(
-        [
-            html.Div(DATASELECTION_CARD),
-        ]
-    )
-]
 
 MIDDLE_DASHBOARD = [
     dbc.CardHeader(html.H5("Output Commands")),
@@ -101,13 +94,34 @@ CONTRIBUTORS_DASHBOARD = [
     )
 ]
 
+INSTRUCTIUONS_DASHBOARD = [
+    dbc.CardHeader(html.H5("Instructions")),
+    dbc.CardBody(
+        [
+            dcc.Markdown('''
+                1. Enter Authors according to template - TODO: link
+                1. Copy from Google Sheets to here
+                1. Go to Nature Authors Page
+                1. Add number of additional authors you want
+                1. Hit F12
+                1. Copy commands and paste into console, hit enter
+                1. Enter Corresponding author information
+            ''')  
+        ]
+    )
+]
+
 
 BODY = dbc.Container(
     [
         dcc.Location(id='url', refresh=False),
         dbc.Row([
-            dbc.Col(
-                dbc.Card(LEFT_DASHBOARD),
+            dbc.Col([
+                    dbc.Card(DATASELECTION_CARD),
+                    html.Br(),
+                    dbc.Card(INSTRUCTIUONS_DASHBOARD)
+                ],
+                #dbc.Card(LEFT_DASHBOARD),
                 className="w-50"
             ),
             dbc.Col(
@@ -140,20 +154,7 @@ def draw_output(fielddata):
 
     all_commands_string = parsing.convert_data_commands(df)
 
-    instructions = dcc.Markdown('''
-        ## Instructions
-        1. Enter Authors according to template - TODO: link
-        1. Copy from Google Sheets to here
-        1. Go to Nature Authors Page
-        1. Add number of additional authors you want
-        1. Hit F12
-        1. Copy commands and paste into console, hit enter
-        1. Enter Corresponding author information
-
-        ## Commands
-    ''')  
-
-    return [[instructions, html.Pre(all_commands_string)]]
+    return [[html.Pre(all_commands_string)]]
 
 # API
 @server.route("/api")
