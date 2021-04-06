@@ -94,13 +94,14 @@ INSTRUCTIUONS_DASHBOARD = [
     dbc.CardBody(
         [
             dcc.Markdown('''
-                1. Enter Authors according to template - TODO: link
+                1. Enter Authors according to template - [Link](https://docs.google.com/spreadsheets/d/1jjUDQq3EEX2P5OCRK_OtoKjiWKNw6VZo8opTcnjXeVQ/edit?usp=sharing)
                 1. Copy from Google Sheets to here
                 1. Go to Nature Authors Page
-                1. Add number of additional authors you want
-                1. Hit F12
+                1. Add number of additional authors you want NOTE: do not copy the corresponding author information which presumably should be last as you'll enter that manually
+                1. Hit F12 to bring up debug console
                 1. Copy commands and paste into console, hit enter
                 1. Enter Corresponding author information
+                1. Click save and continue
             ''')  
         ]
     )
