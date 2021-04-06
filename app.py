@@ -142,7 +142,20 @@ def draw_output(fielddata):
 
     all_commands_string = parsing.convert_data_commands(df)
 
-    return [html.Pre(all_commands_string)]
+    instructions = dcc.Markdown('''
+        ## Instructions
+        1. Enter Authors according to template - TODO: link
+        1. Copy from Google Sheets to here
+        1. Go to Nature Authors Page
+        1. Add number of additional authors you want
+        1. Hit F12
+        1. Copy commands and paste into console, hit enter
+        1. Enter Corresponding author information
+
+        ## Commands
+    ''')  
+
+    return [instructions, html.Pre(all_commands_string)]
 
 # API
 @server.route("/api")
