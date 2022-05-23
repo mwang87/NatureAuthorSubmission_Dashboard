@@ -25,7 +25,15 @@ def parse_str_to_df(author_string):
 
     return df
 
-def clean_authors_df(df):
+def clean_author_df(df):
+    #Making sure the columns actually appear
+    if not "Institution" in df:
+        df["Institution"] = df["Department/Division"]
+
+    return df
+
+
+def deduplicate_affiliations_authors_df(df):
     # Removing duplicates if there are multiple affiliations
     grouped_df = df.groupby(["Email"])
     df = grouped_df.first()
@@ -33,6 +41,14 @@ def clean_authors_df(df):
 
     return df
     
+def create_author_list(authors_df):
+    author_str = ""
+    affiliation_str = ""
+
+    
+
+    return author_str, affiliation_str
+
 def convert_data_commands(authors_df):
     df = authors_df.replace(np.nan, '', regex=True)
 

@@ -146,9 +146,12 @@ app.layout = html.Div(children=[NAVBAR, BODY])
             ])
 def draw_output(fielddata):
     authors_df = parsing.parse_str_to_df(fielddata)
-    authors_df = parsing.clean_authors_df(authors_df)
+    authors_df = parsing.clean_author_df(authors_df)
+    authors_dedup_df = parsing.deduplicate_affiliations_authors_df(authors_df)
 
-    all_commands_string = parsing.convert_data_commands(authors_df)
+    all_commands_string = parsing.convert_data_commands(authors_dedup_df)
+
+    
 
     return [[html.Pre(all_commands_string)]]
 
