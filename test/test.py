@@ -15,6 +15,15 @@ def test():
     #print(df)
     #print(output)
 
+def testnih():
+    import parsing
+    df = pd.read_csv("AuthorArranger.txt", sep="\t")
+    df = parsing.clean_author_df(df)
+    df = parsing.deduplicate_affiliations_authors_df(df)
+    output = parsing.convert_data_commands(df)
+
+    print(output)
 
 if __name__ == "__main__":
-    test()
+    #test()
+    testnih()

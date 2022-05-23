@@ -27,17 +27,80 @@ def parse_str_to_df(author_string):
 
 def clean_author_df(df):
     #Making sure the required columns actually appear
-    if not "Institution" in df:
+    if not "Institution" in df and "Department/Division" in df:
         df["Institution"] = df["Department/Division"]
 
-    return df
+    if not "Order" in df:
+        # this is likely from the NIH Template, lets do some cleanup
+        author_list = df.to_dict(orient="records")
+
+        order = 1
+
+        for author in author_list:
+            institution_list = []
+
+            try:
+                if len(author["Department"]) > 0:
+                    institution_list.append(author["Department"])
+            except:
+                pass
+
+            try:
+                if len(author["Division"]) > 0:
+                    institution_list.append(author["Division"])
+            except:
+                pass
+
+            try:
+                if len(author["Institute"]) > 0:
+                    institution_list.append(author["Institute"])
+            except:
+                pass
+            
+            try:
+                if len(author["Street"]) > 0:
+                    institution_list.append(author["Street"])
+            except:
+                pass
+
+            try:
+                if len(author["City"]) > 0:
+                    institution_list.append(author["City"])
+            except:
+                pass
+            
+            try:
+                if len(author["State"]) > 0:
+                    institution_list.append(author["State"])
+            except:
+                pass
+            
+            try:
+                if len(author["Postal Code"]) > 0:
+                    institution_list.append(author["Postal Code"])
+            except:
+                pass
+
+            author["Institution"] = " ".join(institution_list)
+            author["Order"] = order
+            order += 1
+
+        new_df = pd.DataFrame(author_list)
+
+        #df["Institution"] = df["Institute"]
+        #df["Order"] = 1
+        new_df["First Name"] = new_df["First"]
+        new_df["Last Name"] = new_df["Last"]
+        new_df["Middle Name(s)/Initial(s)"] = new_df["Middle"]
+
+    return new_df
 
 
 def deduplicate_affiliations_authors_df(df):
     # Removing duplicates if there are multiple affiliations
-    grouped_df = df.groupby(["Email"])
-    df = grouped_df.first()
-    df["Email"] = df.index
+    #grouped_df = df.groupby(["Email"])
+    #df = grouped_df.first()
+    #df["Email"] = df.index
 
     return df
     
