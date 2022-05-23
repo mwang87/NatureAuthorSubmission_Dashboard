@@ -16,12 +16,28 @@ def main():
 
     df = pd.read_csv(args.input_tsv, sep="\t")
     convert_data(df)
+
+def parse_str_to_df(author_string):
+    from io import StringIO
+
+    TESTDATA = StringIO(author_string)
+    df = pd.read_csv(TESTDATA, sep=None)
+
+    return df
+
+def clean_authors_df(df):
+    # Removing duplicates if there are multiple affiliations
+    grouped_df = df.groupby(["Email"])
+    df = grouped_df.first()
+    df["Email"] = df.index
+
+    return df
     
 def convert_data_commands(authors_df):
     df = authors_df.replace(np.nan, '', regex=True)
 
     all_commands = []
-    
+
     for i, author_dict in enumerate(df.to_dict(orient="records")):
         order_field = "contrib_auth_{}_author_seq".format(i+1)
         firstname_field = "contrib_auth_{}_first_nm".format(i+1)
@@ -38,12 +54,19 @@ def convert_data_commands(authors_df):
         all_commands.append('document.getElementById("{}").value = "{}"'.format(lastname_field, author_dict["Last Name"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(middlename_field, author_dict["Middle Name(s)/Initial(s)"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(email_field, author_dict["Email"]))
-        all_commands.append('document.getElementById("{}").value = "{}"'.format(org_field, author_dict["Institution"]))
+        
+        try:
+            all_commands.append('document.getElementById("{}").value = "{}"'.format(org_field, author_dict["Institution"]))
+        except:
+            all_commands.append('document.getElementById("{}").value = "{}"'.format(org_field, author_dict["Department/Division"]))
+            pass
+        
         all_commands.append('document.getElementById("{}").value = "{}"'.format(city_field, author_dict["City"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(country_field, author_dict["Country"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(title_field, author_dict["Title"]))
         
     return ";\n".join(all_commands)
+
 
 if __name__ == "__main__":
     main()

@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 import dash
-import dash_core_components as dcc
+from dash import dcc
 import dash_bootstrap_components as dbc
-import dash_html_components as html
-import dash_table
+from dash import html
+from dash import dash_table
+
 import plotly.express as px
 import plotly.graph_objects as go 
 from dash.dependencies import Input, Output, State
 import os
 from zipfile import ZipFile
 import urllib.parse
+
 from flask import Flask, send_from_directory
 
 import pandas as pd
@@ -57,7 +59,7 @@ DATASELECTION_CARD = [
             html.H5(children='Data Selection'),
             dbc.InputGroup(
                 [
-                    dbc.InputGroupAddon("Tabular Authors", addon_type="prepend"),
+                    dbc.InputGroupText("Tabular Authors"),
                     dbc.Textarea(id='fielddata', placeholder="Enter Tablular Data", value=""),
                 ],
                 className="mb-3",
@@ -143,12 +145,10 @@ app.layout = html.Div(children=[NAVBAR, BODY])
                   Input('fielddata', 'value')
             ])
 def draw_output(fielddata):
-    from io import StringIO
+    authors_df = parsing.parse_str_to_df(fielddata)
+    authors_df = parsing.clean_authors_df(authors_df)
 
-    TESTDATA = StringIO(fielddata)
-    df = pd.read_csv(TESTDATA, sep=None)
-
-    all_commands_string = parsing.convert_data_commands(df)
+    all_commands_string = parsing.convert_data_commands(authors_df)
 
     return [[html.Pre(all_commands_string)]]
 
