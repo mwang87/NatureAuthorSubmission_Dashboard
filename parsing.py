@@ -50,7 +50,8 @@ def create_author_list(authors_df):
     grouped_institution_df["Institution"] = grouped_institution_df.index
     all_institutions = set(grouped_institution_df["Institution"].tolist())
 
-    print(all_institutions)
+    #print(all_institutions)
+    # THIS kind of repeats work from NIH, so maybe we don't do that? 
 
     return author_str, affiliation_str
 

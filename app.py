@@ -104,6 +104,8 @@ INSTRUCTIUONS_DASHBOARD = [
                 1. Copy commands and paste into console, hit enter
                 1. Enter Corresponding author information
                 1. Click save and continue
+
+                NOTE: Related tool: https://authorarranger.nci.nih.gov/#/
             ''')  
         ]
     )
@@ -150,8 +152,6 @@ def draw_output(fielddata):
     authors_dedup_df = parsing.deduplicate_affiliations_authors_df(authors_df)
 
     all_commands_string = parsing.convert_data_commands(authors_dedup_df)
-
-    
 
     return [[html.Pre(all_commands_string)]]
 
