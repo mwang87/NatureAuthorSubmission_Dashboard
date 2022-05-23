@@ -26,7 +26,7 @@ def parse_str_to_df(author_string):
     return df
 
 def clean_author_df(df):
-    #Making sure the columns actually appear
+    #Making sure the required columns actually appear
     if not "Institution" in df:
         df["Institution"] = df["Department/Division"]
 
@@ -45,7 +45,12 @@ def create_author_list(authors_df):
     author_str = ""
     affiliation_str = ""
 
-    
+    grouped_institution_df = authors_df.groupby("Institution")
+    grouped_institution_df = grouped_institution_df.first()
+    grouped_institution_df["Institution"] = grouped_institution_df.index
+    all_institutions = set(grouped_institution_df["Institution"].tolist())
+
+    print(all_institutions)
 
     return author_str, affiliation_str
 
@@ -70,13 +75,7 @@ def convert_data_commands(authors_df):
         all_commands.append('document.getElementById("{}").value = "{}"'.format(lastname_field, author_dict["Last Name"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(middlename_field, author_dict["Middle Name(s)/Initial(s)"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(email_field, author_dict["Email"]))
-        
-        try:
-            all_commands.append('document.getElementById("{}").value = "{}"'.format(org_field, author_dict["Institution"]))
-        except:
-            all_commands.append('document.getElementById("{}").value = "{}"'.format(org_field, author_dict["Department/Division"]))
-            pass
-        
+        all_commands.append('document.getElementById("{}").value = "{}"'.format(org_field, author_dict["Institution"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(city_field, author_dict["City"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(country_field, author_dict["Country"]))
         all_commands.append('document.getElementById("{}").value = "{}"'.format(title_field, author_dict["Title"]))
