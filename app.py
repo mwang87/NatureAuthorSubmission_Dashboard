@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 import dash
-import dash_core_components as dcc
+from dash import dcc
 import dash_bootstrap_components as dbc
-import dash_html_components as html
-import dash_table
+from dash import html
+from dash import dash_table
+
 import plotly.express as px
 import plotly.graph_objects as go 
 from dash.dependencies import Input, Output, State
 import os
 from zipfile import ZipFile
 import urllib.parse
+
 from flask import Flask, send_from_directory
 
 import pandas as pd
@@ -57,7 +59,7 @@ DATASELECTION_CARD = [
             html.H5(children='Data Selection'),
             dbc.InputGroup(
                 [
-                    dbc.InputGroupAddon("Tabular Authors", addon_type="prepend"),
+                    dbc.InputGroupText("Tabular Authors"),
                     dbc.Textarea(id='fielddata', placeholder="Enter Tablular Data", value=""),
                 ],
                 className="mb-3",
@@ -94,7 +96,7 @@ INSTRUCTIUONS_DASHBOARD = [
     dbc.CardBody(
         [
             dcc.Markdown('''
-                1. Enter Authors according to template - [Link](https://docs.google.com/spreadsheets/d/1jjUDQq3EEX2P5OCRK_OtoKjiWKNw6VZo8opTcnjXeVQ/edit?usp=sharing)
+                1. Enter Authors according to template - [Link](https://docs.google.com/spreadsheets/d/1jjUDQq3EEX2P5OCRK_OtoKjiWKNw6VZo8opTcnjXeVQ/edit?usp=sharing) - Derived from NIH Formatting - [Link](https://authorarranger.nci.nih.gov/#/web-tool)
                 1. Copy from Google Sheets to here
                 1. Go to Nature Authors Page
                 1. Add number of additional authors you want NOTE: do not copy the corresponding author information which presumably should be last as you'll enter that manually
@@ -102,6 +104,8 @@ INSTRUCTIUONS_DASHBOARD = [
                 1. Copy commands and paste into console, hit enter
                 1. Enter Corresponding author information
                 1. Click save and continue
+
+                NOTE: Related tool for author formatting in papers: https://authorarranger.nci.nih.gov/#/
             ''')  
         ]
     )
@@ -143,12 +147,11 @@ app.layout = html.Div(children=[NAVBAR, BODY])
                   Input('fielddata', 'value')
             ])
 def draw_output(fielddata):
-    from io import StringIO
+    authors_df = parsing.parse_str_to_df(fielddata)
+    authors_df = parsing.clean_author_df(authors_df)
+    authors_dedup_df = parsing.deduplicate_affiliations_authors_df(authors_df)
 
-    TESTDATA = StringIO(fielddata)
-    df = pd.read_csv(TESTDATA, sep=None)
-
-    all_commands_string = parsing.convert_data_commands(df)
+    all_commands_string = parsing.convert_data_commands(authors_dedup_df)
 
     return [[html.Pre(all_commands_string)]]
 

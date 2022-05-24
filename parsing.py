@@ -16,12 +16,113 @@ def main():
 
     df = pd.read_csv(args.input_tsv, sep="\t")
     convert_data(df)
+
+def parse_str_to_df(author_string):
+    from io import StringIO
+
+    TESTDATA = StringIO(author_string)
+    df = pd.read_csv(TESTDATA, sep="\t")
+
+    return df
+
+def clean_author_df(df):
+    #Making sure the required columns actually appear
+    if not "Institution" in df and "Department/Division" in df:
+        df["Institution"] = df["Department/Division"]
+
+    if not "Order" in df:
+        # this is likely from the NIH Template, lets do some cleanup
+        author_list = df.to_dict(orient="records")
+
+        order = 1
+
+        for author in author_list:
+            institution_list = []
+
+            try:
+                if len(author["Department"]) > 0:
+                    institution_list.append(author["Department"])
+            except:
+                pass
+
+            try:
+                if len(author["Division"]) > 0:
+                    institution_list.append(author["Division"])
+            except:
+                pass
+
+            try:
+                if len(author["Institute"]) > 0:
+                    institution_list.append(author["Institute"])
+            except:
+                pass
+            
+            try:
+                if len(author["Street"]) > 0:
+                    institution_list.append(author["Street"])
+            except:
+                pass
+
+            try:
+                if len(author["City"]) > 0:
+                    institution_list.append(author["City"])
+            except:
+                pass
+            
+            try:
+                if len(author["State"]) > 0:
+                    institution_list.append(author["State"])
+            except:
+                pass
+            
+            try:
+                if len(author["Postal Code"]) > 0:
+                    institution_list.append(author["Postal Code"])
+            except:
+                pass
+
+            author["Institution"] = " ".join(institution_list)
+            author["Order"] = order
+            order += 1
+
+        new_df = pd.DataFrame(author_list)
+
+        #df["Institution"] = df["Institute"]
+        #df["Order"] = 1
+        new_df["First Name"] = new_df["First"]
+        new_df["Last Name"] = new_df["Last"]
+        new_df["Middle Name(s)/Initial(s)"] = new_df["Middle"]
+
+    return new_df
+
+
+def deduplicate_affiliations_authors_df(df):
+    # Removing duplicates if there are multiple affiliations
+    #grouped_df = df.groupby(["Email"])
+    #df = grouped_df.first()
+    #df["Email"] = df.index
+
+    return df
     
+def create_author_list(authors_df):
+    author_str = ""
+    affiliation_str = ""
+
+    grouped_institution_df = authors_df.groupby("Institution")
+    grouped_institution_df = grouped_institution_df.first()
+    grouped_institution_df["Institution"] = grouped_institution_df.index
+    all_institutions = set(grouped_institution_df["Institution"].tolist())
+
+    #print(all_institutions)
+    # THIS kind of repeats work from NIH, so maybe we don't do that? 
+
+    return author_str, affiliation_str
+
 def convert_data_commands(authors_df):
     df = authors_df.replace(np.nan, '', regex=True)
 
     all_commands = []
-    
+
     for i, author_dict in enumerate(df.to_dict(orient="records")):
         order_field = "contrib_auth_{}_author_seq".format(i+1)
         firstname_field = "contrib_auth_{}_first_nm".format(i+1)
@@ -44,6 +145,7 @@ def convert_data_commands(authors_df):
         all_commands.append('document.getElementById("{}").value = "{}"'.format(title_field, author_dict["Title"]))
         
     return ";\n".join(all_commands)
+
 
 if __name__ == "__main__":
     main()
