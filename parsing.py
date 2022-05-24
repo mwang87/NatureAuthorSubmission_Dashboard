@@ -21,7 +21,7 @@ def parse_str_to_df(author_string):
     from io import StringIO
 
     TESTDATA = StringIO(author_string)
-    df = pd.read_csv(TESTDATA, sep=None)
+    df = pd.read_csv(TESTDATA, sep="\t")
 
     return df
 
