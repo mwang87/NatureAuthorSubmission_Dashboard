@@ -96,7 +96,7 @@ INSTRUCTIUONS_DASHBOARD = [
     dbc.CardBody(
         [
             dcc.Markdown('''
-                1. Enter Authors according to template - [Link](https://docs.google.com/spreadsheets/d/1jjUDQq3EEX2P5OCRK_OtoKjiWKNw6VZo8opTcnjXeVQ/edit?usp=sharing)
+                1. Enter Authors according to template - [Link](https://docs.google.com/spreadsheets/d/1jjUDQq3EEX2P5OCRK_OtoKjiWKNw6VZo8opTcnjXeVQ/edit?usp=sharing) - Derived from NIH Formatting - [Link](https://authorarranger.nci.nih.gov/#/web-tool)
                 1. Copy from Google Sheets to here
                 1. Go to Nature Authors Page
                 1. Add number of additional authors you want NOTE: do not copy the corresponding author information which presumably should be last as you'll enter that manually
@@ -105,7 +105,7 @@ INSTRUCTIUONS_DASHBOARD = [
                 1. Enter Corresponding author information
                 1. Click save and continue
 
-                NOTE: Related tool: https://authorarranger.nci.nih.gov/#/
+                NOTE: Related tool for author formatting in papers: https://authorarranger.nci.nih.gov/#/
             ''')  
         ]
     )
