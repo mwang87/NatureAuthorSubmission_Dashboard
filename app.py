@@ -39,7 +39,7 @@ NAVBAR = dbc.Navbar(
     children=[
         dbc.NavbarBrand(
             html.Img(src="https://gnps-cytoscape.ucsd.edu/static/img/GNPS_logo.png", width="120px"),
-            href="https://gnps.ucsd.edu"
+            href="https://www.cs.ucr.edu/~mingxunw/"
         ),
         dbc.Nav(
             [
@@ -86,7 +86,11 @@ CONTRIBUTORS_DASHBOARD = [
     dbc.CardHeader(html.H5("Contributors")),
     dbc.CardBody(
         [
-            "Mingxun Wang PhD - UC San Diego",
+            "Mingxun Wang PhD - UC Riverside",
+            html.Br(),
+            html.Br(),
+            html.A('Checkout our other work!', 
+                href="https://www.cs.ucr.edu/~mingxunw/")
         ]
     )
 ]
