@@ -38,8 +38,11 @@ def clean_author_df(df):
 
         for author in author_list:
             # Making sure this is an author instead of just an extra institution for the author
-            if len(author["First"]) == 0 and len(author["Last"]) == 0:
-                continue
+            try:
+                if len(author["First"]) == 0 and len(author["Last"]) == 0:
+                    continue
+            except:
+                pass
 
             institution_list = []
 
