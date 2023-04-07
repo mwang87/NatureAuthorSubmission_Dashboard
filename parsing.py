@@ -37,13 +37,6 @@ def clean_author_df(df):
         order = 1
 
         for author in author_list:
-            # Making sure this is an author instead of just an extra institution for the author
-            try:
-                if len(author["First"]) == 0 and len(author["Last"]) == 0:
-                    continue
-            except:
-                pass
-
             institution_list = []
 
             try:
@@ -104,12 +97,22 @@ def clean_author_df(df):
 
 
 def deduplicate_affiliations_authors_df(df):
-    # Removing duplicates if there are multiple affiliations
-    #grouped_df = df.groupby(["Email"])
-    #df = grouped_df.first()
-    #df["Email"] = df.index
+    author_list = df.to_dict(orient="records")
 
-    return df
+    output_list = []
+
+    for author_dict in author_list:
+        # Making sure this is an author instead of just an extra institution for the author
+        try:
+            if len(author_dict["First Name"]) == 0 and len(author_dict["Last Name"]) == 0:
+                continue
+        except:
+            continue
+
+        output_list.append(author_dict)
+            
+
+    return pd.DataFrame(output_list)
     
 def create_author_list(authors_df):
     author_str = ""
@@ -131,6 +134,7 @@ def convert_data_commands(authors_df):
     all_commands = []
 
     for i, author_dict in enumerate(df.to_dict(orient="records")):
+
         order_field = "contrib_auth_{}_author_seq".format(i+1)
         firstname_field = "contrib_auth_{}_first_nm".format(i+1)
         lastname_field = "contrib_auth_{}_last_nm".format(i+1)
